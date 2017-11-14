@@ -47,12 +47,12 @@ public class STAsGeoJSON implements DrillSimpleFunc {
     com.esri.core.geometry.ogc.OGCGeometry geom1 = com.esri.core.geometry.ogc.OGCGeometry
         .fromBinary(geom1Param.buffer.nioBuffer(geom1Param.start, geom1Param.end - geom1Param.start));
 
-    String geomWKT = geom1.asGeoJson();
+    String geoJson = geom1.asGeoJson();
 
-    int outputSize = geomWKT.getBytes().length;
+    int outputSize = geoJson.getBytes().length;
     buffer = out.buffer = buffer.reallocIfNeeded(outputSize);
     out.start = 0;
     out.end = outputSize;
-    buffer.setBytes(0, geomWKT.getBytes());
+    buffer.setBytes(0, geoJson.getBytes());
   }
 }
