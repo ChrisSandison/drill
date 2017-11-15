@@ -25,6 +25,7 @@ public class TestGeometryFunctions extends BaseTestQuery {
   String wktPoint = "POINT (-121.895 37.339)";
   String geoJson = "{\"type\":\"Point\",\"coordinates\":[-121.895,37.339],"
     + "\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"EPSG:4326\"}}}";
+  String json = "{\"x\":-121.895,\"y\":37.339,\"spatialReference\":{\"wkid\":4326}}";
 
   @Test
   public void testGeometryFromTextCreation() throws Exception {
@@ -57,6 +58,28 @@ public class TestGeometryFunctions extends BaseTestQuery {
         + "from cp.`/sample-data/CA-cities.csv` limit 1")
       .ordered().baselineColumns("EXPR$0")
       .baselineValues(geoJson)
+      .build()
+      .run();
+  }
+
+  @Test
+  public void testJSONFromPointCreation() throws Exception {
+    testBuilder()
+      .sqlQuery("select ST_AsJSON(ST_Point(-121.895, 37.339)) "
+        + "from cp.`/sample-data/CA-cities.csv` limit 1")
+      .ordered().baselineColumns("EXPR$0")
+      .baselineValues(json)
+      .build()
+      .run();
+  }
+
+  @Test
+  public void testJSONFromTextCreation() throws Exception {
+    testBuilder()
+      .sqlQuery("select ST_AsJSON(ST_GeomFromText('" + wktPoint + "')) "
+        + "from cp.`/sample-data/CA-cities.csv` limit 1")
+      .ordered().baselineColumns("EXPR$0")
+      .baselineValues(json)
       .build()
       .run();
   }
